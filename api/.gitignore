@@ -1,0 +1,51 @@
+# .NET build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code settings
+.vscode/
+
+# Rider IDE settings (optional)
+.idea/
+
+# ASP.NET & Entity Framework
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+
+# Logs
+*.log
+logs/
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+
+# Dotnet CLI artifacts
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# WebAssembly builds (Blazor)
+wwwroot/_framework/
+
+# Publish output
+publish/
+out/
+
+# Optional: Secret or temporary files
+secrets.json
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+Migrations
