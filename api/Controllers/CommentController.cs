@@ -1,3 +1,4 @@
+using api.Dtos.Comment;
 using api.Dtos.Stock.Comment;
 using api.Interfaces;
 using api.Mappers;
@@ -11,9 +12,11 @@ namespace api.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentRepository _commentRepo;
-        public CommentController(ICommentRepository commentRepo)
+        private readonly IStockRepository _stockRepo;
+        public CommentController(ICommentRepository commentRepo, IStockRepository stockRepo)
         {
             _commentRepo = commentRepo;
+            _stockRepo = stockRepo;
         }
 
         [HttpGet]
@@ -34,6 +37,23 @@ namespace api.Controllers
             }
 
             return Ok(comment.ToCommentDto());
+        }
+
+        [HttpPost("{stockId}")]
+        public async Task<IActionResult> Create([FromRoute] int stockId, [FromBody] CreateCommentRequestDto commentRequestDto)
+        {
+            bool stockExists = await _stockRepo.ExistsAsync(stockId);
+
+            if (!stockExists)
+            {
+                return BadRequest("No Stock found associated with this Id.");
+            }
+
+            Comment commentModel = commentRequestDto.ToCommentModel(stockId);
+
+            await _commentRepo.CreateAsync(commentModel);
+
+            return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
         }
     }
 }

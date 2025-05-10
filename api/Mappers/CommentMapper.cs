@@ -1,3 +1,4 @@
+using api.Dtos.Comment;
 using api.Dtos.Stock.Comment;
 using api.Models;
 
@@ -14,6 +15,16 @@ namespace api.Mappers
                 Content = commentModel.Content,
                 CreatedOn = commentModel.CreatedOn,
                 StockId = commentModel.StockId
+            };
+        }
+
+        public static Comment ToCommentModel(this CreateCommentRequestDto commentRequestDto, int stockId)
+        {
+            return new Comment
+            {
+                Title = commentRequestDto.Title,
+                Content = commentRequestDto.Content,
+                StockId = stockId
             };
         }
     }
