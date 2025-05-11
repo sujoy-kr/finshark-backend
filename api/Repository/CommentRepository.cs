@@ -1,7 +1,5 @@
 using api.Data;
-using api.Dtos.Comment;
 using api.Interfaces;
-using api.Mappers;
 using api.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +19,20 @@ namespace api.Repository
             await _context.SaveChangesAsync();
 
             return commentModel;
+        }
+
+        public async Task<Comment?> DeleteAsync(int id)
+        {
+            Comment? existingComment = await _context.Comment.FirstOrDefaultAsync(c => c.Id == id);
+            if (existingComment == null)
+            {
+                return null;
+            }
+
+            _context.Comment.Remove(existingComment);
+            await _context.SaveChangesAsync();
+
+            return existingComment;
         }
 
         public async Task<List<Comment>> GetAllAsync()
