@@ -38,22 +38,23 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStock([FromBody] CreateStockRequestDto stockFromBody)
         {
-            Stock stockModel = stockFromBody.ToStockFormDto();
+            Stock stockModel = stockFromBody.ToStockFormCreate();
             await _stockRepo.CreateAsync(stockModel);
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto stockFromBody)
+        public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
         {
-            Stock? stockModel = await _stockRepo.UpdateAsync(id, stockFromBody);
+            Stock stockToUpdate = updateStockRequestDto.ToStockFormUpdate();
+            Stock? stockModel = await _stockRepo.UpdateAsync(id, stockToUpdate);
 
             if (stockModel == null)
             {
                 return NotFound();
             }
 
-            return Ok(stockModel.ToStockDto());
+            return Ok(stockModel.ToUpdateStockResponseDto());
         }
 
         [HttpDelete("{id}")]
