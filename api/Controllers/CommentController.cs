@@ -49,11 +49,24 @@ namespace api.Controllers
                 return BadRequest("No Stock found associated with this Id.");
             }
 
-            Comment commentModel = commentRequestDto.ToCommentModel(stockId);
+            Comment commentModel = commentRequestDto.ToCommentFromCreate(stockId);
 
             await _commentRepo.CreateAsync(commentModel);
 
             return CreatedAtAction(nameof(GetById), new { id = commentModel.Id }, commentModel.ToCommentDto());
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromRoute] int id, UpdateCommentRequestDto updateCommentRequestDto)
+        {
+            Comment commentModel = updateCommentRequestDto.ToCommentFromUpdate();
+            Comment? updatedComment = await _commentRepo.UpdateAsync(id, commentModel);
+            if (updatedComment == null)
+            {
+                return NotFound("No Comment found associated with this Id.");
+            }
+
+            return Ok(updatedComment.ToCommentDto());
         }
     }
 }
