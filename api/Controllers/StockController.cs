@@ -2,8 +2,8 @@ using api.Dtos.Stock;
 using api.Interfaces;
 using api.Mappers;
 using api.Models;
+using api.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Controllers
 {
@@ -18,14 +18,14 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] StockQueryObject query)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            List<Stock> stocks = await _stockRepo.GetAllAsync();
+            List<Stock> stocks = await _stockRepo.GetAllAsync(query);
             List<StockDto> stockDtos = stocks.Select(s => s.ToStockDto()).ToList();
             return Ok(stockDtos);
         }
