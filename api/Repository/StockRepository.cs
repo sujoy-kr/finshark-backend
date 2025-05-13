@@ -56,6 +56,39 @@ namespace api.Repository
                 queryableStocks = queryableStocks.Where(s => s.CompanyName.Contains(query.CompanyName));
             }
 
+            if (!string.IsNullOrWhiteSpace(query.SortBy))
+            {
+                if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.Symbol) : queryableStocks.OrderBy(s => s.Symbol);
+                }
+
+                if (query.SortBy.Equals("CompanyName", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.CompanyName) : queryableStocks.OrderBy(s => s.CompanyName);
+                }
+
+                if (query.SortBy.Equals("Purchase", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.Purchase) : queryableStocks.OrderBy(s => s.Purchase);
+                }
+
+                if (query.SortBy.Equals("LastDiv", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.LastDiv) : queryableStocks.OrderBy(s => s.LastDiv);
+                }
+
+                if (query.SortBy.Equals("Industry", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.Industry) : queryableStocks.OrderBy(s => s.Industry);
+                }
+
+                if (query.SortBy.Equals("MarketCap", StringComparison.OrdinalIgnoreCase))
+                {
+                    queryableStocks = query.IsDescending ? queryableStocks.OrderByDescending(s => s.MarketCap) : queryableStocks.OrderBy(s => s.MarketCap);
+                }
+            }
+
             stocks = await queryableStocks.ToListAsync();
             return stocks;
         }
