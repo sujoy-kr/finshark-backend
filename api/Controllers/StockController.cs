@@ -3,6 +3,7 @@ using api.Interfaces;
 using api.Mappers;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace api.Controllers
 {
@@ -19,14 +20,24 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             List<Stock> stocks = await _stockRepo.GetAllAsync();
             List<StockDto> stockDtos = stocks.Select(s => s.ToStockDto()).ToList();
             return Ok(stockDtos);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Stock? stock = await _stockRepo.GetByIdAsync(id);
             if (stock == null)
             {
@@ -38,14 +49,24 @@ namespace api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateStock([FromBody] CreateStockRequestDto stockFromBody)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Stock stockModel = stockFromBody.ToStockFormCreate();
             await _stockRepo.CreateAsync(stockModel);
             return CreatedAtAction(nameof(GetById), new { id = stockModel.Id }, stockModel.ToStockDto());
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> UpdateStock([FromRoute] int id, [FromBody] UpdateStockRequestDto updateStockRequestDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Stock stockToUpdate = updateStockRequestDto.ToStockFormUpdate();
             Stock? stockModel = await _stockRepo.UpdateAsync(id, stockToUpdate);
 
@@ -57,9 +78,14 @@ namespace api.Controllers
             return Ok(stockModel.ToUpdateStockResponseDto());
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteStock([FromRoute] int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Stock? stockModel = await _stockRepo.DeleteAsync(id);
 
             if (stockModel == null)
