@@ -21,7 +21,7 @@ appsettings.Development.json
 appsettings.Local.json
 appsettings.*.json
 ScaffoldingReadMe.txt
-Migrations/*ModelSnapshot.cs
+Migrations
 
 # Logs
 *.log
