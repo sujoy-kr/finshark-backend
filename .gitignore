@@ -1,2 +1,55 @@
-.vscode
-.vs
+# .NET build artifacts
+bin/
+obj/
+artifacts/
+publish/
+out/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE settings
+.vscode/
+.idea/
+.vs/
+
+# ASP.NET & Entity Framework
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+ScaffoldingReadMe.txt
+Migrations/*ModelSnapshot.cs
+
+# Logs
+*.log
+logs/
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Dotnet CLI artifacts
+project.lock.json
+project.fragment.lock.json
+
+# WebAssembly builds (Blazor)
+wwwroot/_framework/
+
+# Optional/secret/temporary files
+secrets.json
+*.tmp
+*.cache
+*.bak
+*.swp
+*.db
+*.sqlite
+*.pdb
+*.mdb
+
+# OS generated files
+.DS_Store
+Thumbs.db
