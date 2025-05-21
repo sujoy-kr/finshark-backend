@@ -1,6 +1,5 @@
 using api.Extensions;
 using api.Interfaces;
-using api.Migrations;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -71,6 +70,28 @@ namespace api.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
             return Created();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeletePortfolio(string symbol)
+        {
+            string? username = User.GetUserName();
+            AppUser? appUser = await _userManager.FindByNameAsync(username);
+            List<Stock> userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
+
+            List<Stock> filteredStocks = userPortfolio.Where(s => s.Symbol.ToLower() == symbol.ToLower()).ToList();
+
+            if (filteredStocks.Count() == 1)
+            {
+                await _portfolioRepo.DeletePortfolio(appUser, symbol);
+            }
+            else
+            {
+                return BadRequest("Stock does not exist in this user portfolio.");
+            }
+
+            return NoContent();
         }
     }
 }
