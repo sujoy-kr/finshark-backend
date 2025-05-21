@@ -12,9 +12,17 @@ namespace api.Repository
         {
             _context = context;
         }
-        public Task<List<Stock>> GetUserPortfolio(AppUser user)
+
+        public async Task<Portfolio> CreatePortfolio(Portfolio portfolio)
         {
-            return _context.Portfolios.Where(u => u.AppUserId == user.Id).Select(stock => new Stock
+            await _context.Portfolios.AddAsync(portfolio);
+            await _context.SaveChangesAsync();
+            return portfolio;
+        }
+
+        public async Task<List<Stock>> GetUserPortfolio(AppUser user)
+        {
+            return await _context.Portfolios.Where(u => u.AppUserId == user.Id).Select(stock => new Stock
             {
                 Id = stock.StockId,
                 Symbol = stock.Stock.Symbol,

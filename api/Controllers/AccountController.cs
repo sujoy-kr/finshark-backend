@@ -38,7 +38,7 @@ namespace api.Controllers
                     return Unauthorized("No user associated with this username is found.");
                 }
 
-                var passCheck = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+                Microsoft.AspNetCore.Identity.SignInResult passCheck = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
                 if (!passCheck.Succeeded)
                 {

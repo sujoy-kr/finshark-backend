@@ -1,5 +1,6 @@
 using api.Extensions;
 using api.Interfaces;
+using api.Migrations;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -35,6 +36,41 @@ namespace api.Controllers
             AppUser? appUser = await _userManager.FindByNameAsync(username);
             List<Stock> userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
             return Ok(userPortfolio);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddPortfolio(string symbol)
+        {
+            string? username = User.GetUserName();
+            AppUser? appUser = await _userManager.FindByNameAsync(username);
+            Stock? stockModel = await _stockRepo.GetBySymbolAsync(symbol);
+
+            if (stockModel == null)
+            {
+                return NotFound("No stock found associated with this symbol.");
+            }
+
+            List<Stock> userPortfolio = await _portfolioRepo.GetUserPortfolio(appUser);
+
+            if (userPortfolio.Any(p => p.Symbol.ToLower() == symbol.ToLower()))
+            {
+                return BadRequest("Stock already exists on this user portfolio.");
+            }
+
+            Portfolio portfolioModel = new Portfolio
+            {
+                AppUserId = appUser.Id,
+                StockId = stockModel.Id
+            };
+
+            await _portfolioRepo.CreatePortfolio(portfolioModel);
+
+            if (portfolioModel == null)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+            return Created();
         }
     }
 }
