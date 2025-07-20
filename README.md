@@ -19,7 +19,6 @@ A **.NET 9 Web API** project following Clean Architecture principles. Built with
 ## 🧱 Project Structure
 
 ```plaintext
-api/
 │
 ├── Controllers/                      # API Controllers (entry points)
 │   ├── AccountController.cs
