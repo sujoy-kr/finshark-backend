@@ -99,8 +99,8 @@ A **.NET 9 Web API** project following Clean Architecture principles. Built with
 
 ```bash
 # Clone the repo
-git clone https://github.com/sujoy-kr/finshark.git
-cd finshark
+git clone https://github.com/sujoy-kr/finshark-backend.git
+cd finshark-backend
 ```
 
 ### ▶️ Run the Project
